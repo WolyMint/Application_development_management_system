@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Login page</title>
+    <link rel="stylesheet prefetch" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<div class="overlay">
+    <form method="post" action="/login" th:object="${loginRequest}">
+        <div class="con">
+            <header class="head-form">
+                <h2>Login into your account</h2>
+            </header>
+            <br/>
+            <div class="f-set">
+                <span class="input-item">
+                    <i class="fa fa-user" aria-hidden="true"></i>
+                </span>
+                <input class="form-input" id="txt-input" type="text" placeholder="@UserName" name="login" required>
+                <br/>
+                <span class="input-item">
+                    <i class="fa fa-unlock-alt" aria-hidden="true"></i>
+                </span>
+                <input class="form-input" type="password" placeholder="Password" name="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" required>
+                <br/>
+                <button class="log-in">Log In</button>
+            </div>
+            <div class="other">
+                <!--<a href="/forgot-password" class="btn submits frgt-pass">Forgot Password</a>-->
+                <a href="/register" class="btn submits sign-up">Sign Up <i class="fa fa-user-plus" aria-hidden="true"></i></a>
+            </div>
+        </div>
+    </form>
+</div>
+
+</body>
+</html>
