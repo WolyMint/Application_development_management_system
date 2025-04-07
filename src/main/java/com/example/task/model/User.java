@@ -19,13 +19,16 @@ public class User {
     public User() {
     }
 
-    public User(Long id, String name, String email, LocalDate birth, Integer age) {
+    public User(Long id, String name, String email, String login, String password, LocalDate birth, Integer age) {
         this.id = id;
         this.name = name;
         this.email = email;
+        this.login = login;
+        this.password = password;
         this.birth = birth;
         this.age = age;
     }
+
 
     public Long getId() {
         return id;
@@ -83,12 +86,15 @@ public class User {
         this.age = age;
     }
 
+
     @Override
     public String toString() {
         return "User{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
+                ", login='" + login + '\'' +
+                ", password='" + password + '\'' +
                 ", birth=" + birth +
                 ", age=" + age +
                 '}';

@@ -2,6 +2,8 @@ package com.example.task.controller;
 
 import com.example.task.model.User;
 import com.example.task.service.UserService;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -37,5 +39,4 @@ public class UserController {
     ) {
         userService.update(id, email, name);
     }
-
 }
