@@ -60,4 +60,17 @@ public class UserService {
 
         //userRepository.save(user);
     }
+    public User registerUser(String login, String password, String email){
+        if (login == null || password == null) return null;
+        User user = new User();
+        user.setLogin(login);
+        user.setPassword(password);
+        user.setEmail(email);
+        return userRepository.save(user);
+    }
+
+    public User authentication(String login, String password){
+        return userRepository.findByLoginAndPassword(login, password).orElse(null);
+    }
+
 }

@@ -2,6 +2,7 @@ package com.example.task.controller;
 
 import com.example.task.model.Todo;
 import com.example.task.repository.TodoRepository;
+import com.example.task.service.TodoService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,25 +13,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Controller
-public class TodoController implements CommandLineRunner {
+public class TodoController{
 
-    private final TodoRepository todoRepository;
+    private final TodoService todoService;
 
-    public TodoController(TodoRepository todoRepository) {
-        this.todoRepository = todoRepository;
+    public TodoController(TodoService todoService) {
+        this.todoService = todoService;
     }
 
-    @GetMapping
-    public String index(Model model) {
-        List<Todo> allTodos = todoRepository.findAll();
-        model.addAttribute("allTodos",allTodos);
+    @GetMapping("/")
+    public String personalPage(Model model) {
+        model.addAttribute("allTodos", todoService.getAllTodos());
         model.addAttribute("newTodo", new Todo());
-        return "index";
+        return "personal_page";
     }
 
     @PostMapping("/add")
     public String add(@ModelAttribute Todo todoItem){
-        todoRepository.save(todoItem);
+        todoService.addTodo(todoItem);
         //Добавили дело и обратно перешли на страницу
         return "redirect:/";
     }
@@ -38,36 +38,21 @@ public class TodoController implements CommandLineRunner {
     @PostMapping("/delete/{id}")
     //@PathVariable - добавляет переменную как путь ({id} = Long id)
     public String deleteTodoItem(@PathVariable("id") Long id){
-        todoRepository.deleteById(id);
+        todoService.deleteById(id);
         return "redirect:/";
     }
 
     @PostMapping("/removeAll")
     public String removeAll(){
-        todoRepository.deleteAll();
+        todoService.deleteAll();
         return "redirect:/";
     }
 
     @PostMapping("/search")
-    //@RequestParam - принимает в переменную которую отправили
-    public String searchTodoItems(@RequestParam("searchTerm") String searchTerm, Model model){
-        List<Todo> allItems = todoRepository.findAll();
-        ArrayList<Todo> searchResults = new ArrayList<>();
-
-        for(Todo item: allItems){
-            if(item.getTitle().toLowerCase().contains(searchTerm.toLowerCase())){
-                searchResults.add(item);
-            }
-        }
-        model.addAttribute("allTodos",searchResults);
+    public String search(@RequestParam String searchTerm, Model model) {
+        model.addAttribute("allTodos", todoService.search(searchTerm));
         model.addAttribute("newTodo", new Todo());
-        model.addAttribute("searchTerm",searchTerm);
-        return "index";
-    }
-
-    @Override
-    public void run(String... args) throws Exception {
-        todoRepository.save(new Todo("Item 1"));
-        todoRepository.save(new Todo("Item 2"));
+        model.addAttribute("searchTerm", searchTerm);
+        return "personal_page";
     }
 }
