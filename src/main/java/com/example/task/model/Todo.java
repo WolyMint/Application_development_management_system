@@ -3,16 +3,20 @@ package com.example.task.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name="todo")
+@Table(name = "todo")
 public class Todo {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String title;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 
-    public Todo() {
-    }
+    public Todo() {}
 
     public Todo(String title) {
         this.title = title;
@@ -32,5 +36,13 @@ public class Todo {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

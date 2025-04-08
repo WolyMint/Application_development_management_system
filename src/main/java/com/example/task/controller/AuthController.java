@@ -2,6 +2,7 @@ package com.example.task.controller;
 
 import com.example.task.model.User;
 import com.example.task.service.UserService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,15 +34,13 @@ public class AuthController {
         return registeredUser == null ? "error_page" : "redirect:/login";
     }
     @PostMapping("/login")
-    public String login(@ModelAttribute User user, Model model){
-        System.out.println("login request: "+user);
+    public String login(@ModelAttribute User user, HttpSession session, Model model) {
         User authenticated = userService.authentication(user.getLogin(), user.getPassword());
-        if(authenticated != null){
-            model.addAttribute("userLogin", authenticated.getLogin());
-            return "personal_page";
-        }else{
+        if (authenticated != null) {
+            session.setAttribute("user", authenticated);
+            return "redirect:/";
+        } else {
             return "error_page";
         }
     }
-
 }

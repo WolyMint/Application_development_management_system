@@ -1,6 +1,7 @@
 package com.example.task.service;
 
 import com.example.task.model.Todo;
+import com.example.task.model.User;
 import com.example.task.repository.TodoRepository;
 import org.springframework.stereotype.Service;
 
@@ -34,5 +35,9 @@ public class TodoService {
         return todoRepository.findAll().stream()
                 .filter(todo -> todo.getTitle().toLowerCase().contains(searchTerm.toLowerCase()))
                 .toList();
+    }
+
+    public List<Todo> getTodosByUser(User user) {
+        return todoRepository.findByUser(user);
     }
 }

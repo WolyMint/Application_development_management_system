@@ -72,5 +72,4 @@ public class UserService {
     public User authentication(String login, String password){
         return userRepository.findByLoginAndPassword(login, password).orElse(null);
     }
-
 }

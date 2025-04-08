@@ -1,9 +1,8 @@
 package com.example.task.controller;
 
 import com.example.task.model.Todo;
-import com.example.task.repository.TodoRepository;
+import com.example.task.model.User;
 import com.example.task.service.TodoService;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -22,16 +21,16 @@ public class TodoController{
     }
 
     @GetMapping("/")
-    public String personalPage(Model model) {
-        model.addAttribute("allTodos", todoService.getAllTodos());
+    public String personalPage(@SessionAttribute("user") User user, Model model) {
+        model.addAttribute("allTodos", todoService.getTodosByUser(user));
         model.addAttribute("newTodo", new Todo());
         return "personal_page";
     }
 
     @PostMapping("/add")
-    public String add(@ModelAttribute Todo todoItem){
+    public String add(@ModelAttribute Todo todoItem, @SessionAttribute("user") User user){
+        todoItem.setUser(user);
         todoService.addTodo(todoItem);
-        //Добавили дело и обратно перешли на страницу
         return "redirect:/";
     }
 
