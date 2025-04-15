@@ -23,7 +23,7 @@ public class AuthController {
         return "register_page";
     }
     @GetMapping("/login")
-    public String getLoginPage(Model model){
+    public String getLoginPage(Model model) {
         model.addAttribute("loginRequest", new User());
         return "login_page";
     }
@@ -33,14 +33,15 @@ public class AuthController {
         User registeredUser = userService.registerUser(user.getLogin(), user.getPassword(), user.getEmail());
         return registeredUser == null ? "error_page" : "redirect:/login";
     }
+
     @PostMapping("/login")
     public String login(@ModelAttribute User user, HttpSession session, Model model) {
         User authenticated = userService.authentication(user.getLogin(), user.getPassword());
         if (authenticated != null) {
             session.setAttribute("user", authenticated);
-            return "redirect:/";
+            return "redirect:/personal_page"; // редирект на главную страницу
         } else {
-            return "error_page";
+            return "error_page"; // страница ошибки
         }
     }
 }

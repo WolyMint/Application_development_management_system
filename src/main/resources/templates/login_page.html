@@ -23,7 +23,7 @@
                 <span class="input-item">
                     <i class="fa fa-unlock-alt" aria-hidden="true"></i>
                 </span>
-                <input class="form-input" type="password" placeholder="Password" name="password" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" required>
+                <input class="form-input" type="password" placeholder="Password" name="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" required>
                 <br/>
                 <button class="log-in">Log In</button>
             </div>

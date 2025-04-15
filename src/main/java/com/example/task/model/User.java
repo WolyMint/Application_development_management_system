@@ -2,6 +2,9 @@ package com.example.task.model;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import java.time.LocalDate;
 @Entity
 @Table(name = "users")
@@ -15,6 +18,9 @@ public class User {
     private String password;
     private LocalDate birth;
     private Integer age;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Todo> todo = new ArrayList<>();
 
     public User() {
     }

@@ -20,31 +20,35 @@ public class TodoController{
         this.todoService = todoService;
     }
 
-    @GetMapping("/")
-    public String personalPage(@SessionAttribute("user") User user, Model model) {
+    @GetMapping("/personal_page")
+    public String personal_page(@SessionAttribute(value = "user", required = false) User user, Model model) {
+        if (user == null) {
+            return "redirect:/register_page"; // или куда-то на стартовую
+        }
         model.addAttribute("allTodos", todoService.getTodosByUser(user));
         model.addAttribute("newTodo", new Todo());
         return "personal_page";
     }
 
+
     @PostMapping("/add")
     public String add(@ModelAttribute Todo todoItem, @SessionAttribute("user") User user){
         todoItem.setUser(user);
         todoService.addTodo(todoItem);
-        return "redirect:/";
+        return "redirect:/personal_page";
     }
 
     @PostMapping("/delete/{id}")
     //@PathVariable - добавляет переменную как путь ({id} = Long id)
     public String deleteTodoItem(@PathVariable("id") Long id){
         todoService.deleteById(id);
-        return "redirect:/";
+        return "redirect:/personal_page";
     }
 
     @PostMapping("/removeAll")
     public String removeAll(){
         todoService.deleteAll();
-        return "redirect:/";
+        return "redirect:/personal_page";
     }
 
     @PostMapping("/search")
