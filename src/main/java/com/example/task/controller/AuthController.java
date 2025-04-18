@@ -30,8 +30,8 @@ public class AuthController {
     @PostMapping("/register")
     public String register(@ModelAttribute User user){
         System.out.println("register request: "+user);
-        User registeredUser = userService.registerUser(user.getLogin(), user.getPassword(), user.getEmail());
-        return registeredUser == null ? "error_page" : "redirect:/login";
+        User registeredUser = userService.registerUser(user.getLogin(), user.getName(), user.getPassword(), user.getEmail(), user.getBirth());
+        return registeredUser == null ? "error_page" : "redirect:/login     ";
     }
 
     @PostMapping("/login")
