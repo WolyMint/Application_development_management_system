@@ -5,9 +5,7 @@ import com.example.task.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 public class AuthController {
@@ -22,26 +20,45 @@ public class AuthController {
         model.addAttribute("registerRequest", new User());
         return "register_page";
     }
+
     @GetMapping("/login")
     public String getLoginPage(Model model) {
         model.addAttribute("loginRequest", new User());
         return "login_page";
     }
+
     @PostMapping("/register")
-    public String register(@ModelAttribute User user){
-        System.out.println("register request: "+user);
-        User registeredUser = userService.registerUser(user.getLogin(), user.getName(), user.getPassword(), user.getEmail(), user.getBirth());
-        return registeredUser == null ? "error_page" : "redirect:/login     ";
+    public String register(@ModelAttribute("registerRequest") User user){
+        System.out.println("Register request: " + user);
+
+        try {
+            userService.create(user); // 🔄 Используем главный метод регистрации с расчётом возраста и проверками
+            return "redirect:/login";
+        } catch (IllegalStateException e) {
+            System.out.println("Ошибка регистрации: " + e.getMessage());
+            return "error_page"; // можно передавать сообщение об ошибке в модель, если нужно
+        }
     }
 
     @PostMapping("/login")
-    public String login(@ModelAttribute User user, HttpSession session, Model model) {
+    public String login(@ModelAttribute("loginRequest") User user, HttpSession session) {
         User authenticated = userService.authentication(user.getLogin(), user.getPassword());
+
         if (authenticated != null) {
             session.setAttribute("user", authenticated);
-            return "redirect:/personal_page"; // редирект на главную страницу
+            return "redirect:/personal_page"; // ✅ редирект на личную страницу
         } else {
-            return "error_page"; // страница ошибки
+            return "error_page";
         }
+    }
+
+    @GetMapping("/profile")
+    public String profile(HttpSession session, Model model) {
+        User user = (User) session.getAttribute("user");
+        if (user == null) {
+            return "redirect:/login";
+        }
+        model.addAttribute("user", user);
+        return "profile";
     }
 }
