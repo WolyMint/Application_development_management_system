@@ -61,4 +61,20 @@ public class AuthController {
         model.addAttribute("user", user);
         return "profile";
     }
+
+    @PostMapping("/profile")
+    public String updateProfile(@ModelAttribute("user") User updatedUser, HttpSession session) {
+        User currentUser = (User) session.getAttribute("user");
+        if (currentUser == null) {
+            return "redirect:/login";
+        }
+
+        // Передаём в сервис все обновления
+        userService.updateProfile(currentUser.getId(), updatedUser);
+
+        // Обновляем сессию
+        session.setAttribute("user", userService.findById(currentUser.getId()));
+        return "redirect:/profile";
+    }
+
 }

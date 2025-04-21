@@ -74,4 +74,30 @@ public class UserService {
     public User authentication(String login, String password){
         return userRepository.findByLoginAndPassword(login, password).orElse(null);
     }
+    @Transactional
+    public void updateProfile(Long id, User updatedUser) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new IllegalStateException("Пользователь не найден"));
+
+        // Проверка email на уникальность
+        if (!user.getEmail().equals(updatedUser.getEmail())) {
+            Optional<User> emailCheck = userRepository.findByEmail(updatedUser.getEmail());
+            if (emailCheck.isPresent() && !emailCheck.get().getId().equals(id)) {
+                throw new IllegalStateException("Email уже используется другим пользователем");
+            }
+        }
+
+        user.setName(updatedUser.getName());
+        user.setLogin(updatedUser.getLogin());
+        user.setEmail(updatedUser.getEmail());
+        user.setBirth(updatedUser.getBirth());
+
+        // Автоматический перерасчет возраста
+        user.setAge(Period.between(updatedUser.getBirth(), LocalDate.now()).getYears());
+    }
+    public User findById(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new IllegalStateException("Пользователь не найден"));
+    }
+
 }
