@@ -40,4 +40,15 @@ public class TodoService {
     public List<Todo> getTodosByUser(User user) {
         return todoRepository.findByUser(user);
     }
+    public List<Todo> getTodosAssignedTo(User user) {
+        return todoRepository.findByAssignedUser(user);
+    }
+
+    public void markAsCompleted(Long id) {
+        Todo todo = todoRepository.findById(id)
+                .orElseThrow(() -> new IllegalStateException("Задача не найдена"));
+        todo.setCompleted(true);
+        todoRepository.save(todo);
+    }
+
 }

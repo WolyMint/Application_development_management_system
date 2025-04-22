@@ -23,13 +23,20 @@ public class UserService {
     }
 
     public User create(User user) {
-        Optional<User> optionalUser = userRepository.findByEmail(user.getEmail());
-        if(optionalUser.isPresent()) {
+        Optional<User> optionalUserByEmail = userRepository.findByEmail(user.getEmail());
+        if (optionalUserByEmail.isPresent()) {
             throw new IllegalStateException("Пользователь с таким email уже существует.");
         }
+
+        Optional<User> optionalUserByLogin = userRepository.findByLogin(user.getLogin());
+        if (optionalUserByLogin.isPresent()) {
+            throw new IllegalStateException("Пользователь с таким логином уже существует.");
+        }
+
         user.setAge(Period.between(user.getBirth(), LocalDate.now()).getYears());
         return userRepository.save(user);
     }
+
 
     public void delete(Long id) {
         Optional<User> optionalUser = userRepository.findById(id);

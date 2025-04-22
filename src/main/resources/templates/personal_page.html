@@ -20,12 +20,17 @@
 <div class="container mt-3">
     <h1 class="text-center mb-4">Список дел</h1>
 
-
     <form th:action="@{/add}" th:object="${newTodo}" method="post" class="mb-3">
-        <div class="input-group">
+        <div class="input-group mb-2">
             <input type="text" class="form-control" th:field="*{title}" placeholder="Enter todo item">
-            <button class="btn btn-primary" type="submit">Add</button>
         </div>
+        <div class="input-group mb-2">
+            <select class="form-select" name="assignedUserId" required>
+                <option value="" disabled selected>Выбери пользователя</option>
+                <option th:each="user : ${allUsers}" th:value="${user.id}" th:text="${user.name}">User</option>
+            </select>
+        </div>
+        <button class="btn btn-primary" type="submit">Add</button>
     </form>
 
     <form th:action="@{/removeAll}" method="post" class="text-center mb-4">
@@ -41,12 +46,19 @@
 
     <ul class="list-group">
         <li th:each="item : ${allTodos}" class="list-group-item d-flex justify-content-between align-items-center">
-            <span th:text="${item.title}"></span>
+            <div>
+                <strong th:text="${item.title}">Название</strong>
+                <br/>
+                <small th:if="${item.assignedUser != null}">
+                    Назначено: <span th:text="${item.assignedUser.name}">Имя</span>
+                </small>
+            </div>
             <form th:action="@{/delete/{id}(id=${item.id})}" method="post">
                 <button type="submit" class="btn btn-danger">Удалить</button>
             </form>
         </li>
     </ul>
+
 
 </div>
 

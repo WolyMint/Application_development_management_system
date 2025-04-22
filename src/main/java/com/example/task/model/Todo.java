@@ -16,6 +16,13 @@ public class Todo {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @ManyToOne
+    @JoinColumn(name = "assigned_user_id")
+    private User assignedUser; // Кому назначена задача
+
+    private boolean completed = false; // Выполнена или нет
+
+
     public Todo() {}
 
     public Todo(String title) {
@@ -44,5 +51,21 @@ public class Todo {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public boolean isCompleted() {
+        return completed;
+    }
+
+    public void setCompleted(boolean completed) {
+        this.completed = completed;
+    }
+
+    public User getAssignedUser() {
+        return assignedUser;
+    }
+
+    public void setAssignedUser(User assignedUser) {
+        this.assignedUser = assignedUser;
     }
 }
