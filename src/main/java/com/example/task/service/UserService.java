@@ -3,6 +3,7 @@ package com.example.task.service;
 import com.example.task.model.User;
 import com.example.task.repository.UserRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -107,4 +108,8 @@ public class UserService {
                 .orElseThrow(() -> new IllegalStateException("Пользователь не найден"));
     }
 
+    public User findByLogin(String login) {
+        return userRepository.findByLogin(login)
+                .orElseThrow(() -> new UsernameNotFoundException("Пользователь не найден" + login));
+    }
 }

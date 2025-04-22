@@ -37,9 +37,6 @@ public class TodoService {
                 .toList();
     }
 
-    public List<Todo> getTodosByUser(User user) {
-        return todoRepository.findByUser(user);
-    }
     public List<Todo> getTodosAssignedTo(User user) {
         return todoRepository.findByAssignedUser(user);
     }
@@ -50,5 +47,19 @@ public class TodoService {
         todo.setCompleted(true);
         todoRepository.save(todo);
     }
+    public List<Todo> getTodosForUser(Long userId) {
+        return todoRepository.findByAuthorIdOrAssignedUserId(userId, userId);
+    }
+    public void save(Todo todo) {
+        todoRepository.save(todo);
+    }
+    public List<Todo> getAssignedToMe(Long userId) {
+        return todoRepository.findByAssignedUserId(userId);
+    }
+
+    public List<Todo> getAssignedByMe(Long userId) {
+        return todoRepository.findByAuthorId(userId);
+    }
+
 
 }

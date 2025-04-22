@@ -27,7 +27,7 @@
         <div class="input-group mb-2">
             <select class="form-select" name="assignedUserId" required>
                 <option value="" disabled selected>Выбери пользователя</option>
-                <option th:each="user : ${allUsers}" th:value="${user.id}" th:text="${user.name}">User</option>
+                <option th:each="user : ${allUsers}" th:value="${user.login}" th:text="${user.login}">User</option>
             </select>
         </div>
         <button class="btn btn-primary" type="submit">Add</button>
@@ -44,20 +44,34 @@
         </div>
     </form>
 
-    <ul class="list-group">
-        <li th:each="item : ${allTodos}" class="list-group-item d-flex justify-content-between align-items-center">
-            <div>
-                <strong th:text="${item.title}">Название</strong>
-                <br/>
-                <small th:if="${item.assignedUser != null}">
-                    Назначено: <span th:text="${item.assignedUser.name}">Имя</span>
-                </small>
+    <h2 class="mt-4">📌 Мне назначены задачи:</h2>
+    <ul class="list-group mb-4">
+        <li th:each="todo : ${assignedToMe}" class="list-group-item d-flex justify-content-between align-items-center">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" th:checked="${todo.completed}" disabled>
+                <label class="form-check-label" th:text="${todo.title}"></label>
+                <div><small>Назначил: <b th:text="${todo.author.login}"></b></small></div>
             </div>
-            <form th:action="@{/delete/{id}(id=${item.id})}" method="post">
-                <button type="submit" class="btn btn-danger">Удалить</button>
+            <form th:action="@{'/delete/' + ${todo.id}}" method="post">
+                <button type="submit" class="btn btn-danger btn-sm">Удалить</button>
             </form>
         </li>
     </ul>
+
+    <h2 class="mt-4">🧾 Я назначил другим:</h2>
+    <ul class="list-group">
+        <li th:each="todo : ${assignedByMe}" class="list-group-item d-flex justify-content-between align-items-center">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" th:checked="${todo.completed}" disabled>
+                <label class="form-check-label" th:text="${todo.title}"></label>
+                <div><small>Исполнитель: <b th:text="${todo.assignedUser.login}"></b></small></div>
+            </div>
+            <form th:action="@{'/delete/' + ${todo.id}}" method="post">
+                <button type="submit" class="btn btn-danger btn-sm">Удалить</button>
+            </form>
+        </li>
+    </ul>
+
 
 
 </div>

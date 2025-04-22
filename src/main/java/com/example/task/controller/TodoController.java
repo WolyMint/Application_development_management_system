@@ -4,9 +4,13 @@ import com.example.task.model.Todo;
 import com.example.task.model.User;
 import com.example.task.service.TodoService;
 import com.example.task.service.UserService;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 public class TodoController{
@@ -18,29 +22,37 @@ public class TodoController{
         this.todoService = todoService;
         this.userService = userService;
     }
-
     @GetMapping("/personal_page")
-    public String personal_page(@SessionAttribute(value = "user", required = false) User user, Model model) {
-        if (user == null) {
-            return "redirect:/register_page";
-        }
-        model.addAttribute("allTodos", todoService.getTodosByUser(user));
+    public String showPersonalPage(Model model, @AuthenticationPrincipal UserDetails userDetails) {
+        User currentUser = userService.findByLogin(userDetails.getUsername());
+
+        List<Todo> assignedToMe = todoService.getAssignedToMe(currentUser.getId());
+        List<Todo> assignedByMe = todoService.getAssignedByMe(currentUser.getId());
+
+        model.addAttribute("assignedToMe", assignedToMe);
+        model.addAttribute("assignedByMe", assignedByMe);
         model.addAttribute("newTodo", new Todo());
-        model.addAttribute("allUsers", userService.findAll()); // 🔥 добавим список всех пользователей
+        model.addAttribute("allUsers", userService.findAll());
+
         return "personal_page";
     }
 
-    @PostMapping("/add")
-    public String add(@ModelAttribute Todo todoItem,
-                      @RequestParam("assignedUserId") Long assignedUserId,
-                      @SessionAttribute("user") User user){
 
-        todoItem.setUser(user); // кто создал задачу
-        User assignedUser = userService.findById(assignedUserId); // кому назначили
-        todoItem.setAssignedUser(assignedUser); // сохраняем
-        todoService.addTodo(todoItem);
+
+    @PostMapping("/add")
+    public String addTodo(@ModelAttribute Todo todo,
+                          @RequestParam("assignedUserLogin") String assignedUserLogin,
+                          @AuthenticationPrincipal UserDetails userDetails) {
+        User author = userService.findByLogin(userDetails.getUsername());
+        User assignedUser = userService.findByLogin(assignedUserLogin);
+
+        todo.setAuthor(author);
+        todo.setAssignedUser(assignedUser);
+        todoService.save(todo);
+
         return "redirect:/personal_page";
     }
+
 
     @PostMapping("/delete/{id}")
     //@PathVariable - добавляет переменную как путь ({id} = Long id)

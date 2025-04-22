@@ -21,9 +21,6 @@ public class User {
     private LocalDate birth;
     private Integer age;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Todo> todo = new ArrayList<>();
-
     public User() {
     }
 

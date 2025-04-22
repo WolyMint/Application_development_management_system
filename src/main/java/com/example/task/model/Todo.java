@@ -12,9 +12,10 @@ public class Todo {
 
     private String title;
 
+
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "author_id")
+    private User author;
 
     @ManyToOne
     @JoinColumn(name = "assigned_user_id")
@@ -45,12 +46,12 @@ public class Todo {
         this.title = title;
     }
 
-    public User getUser() {
-        return user;
+    public User getAuthor() {
+        return author;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setAuthor(User author) {
+        this.author = author;
     }
 
     public boolean isCompleted() {
