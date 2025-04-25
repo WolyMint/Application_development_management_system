@@ -23,8 +23,10 @@ public class TodoController{
         this.userService = userService;
     }
     @GetMapping("/personal_page")
-    public String showPersonalPage(Model model, @AuthenticationPrincipal UserDetails userDetails) {
-        User currentUser = userService.findByLogin(userDetails.getUsername());
+    public String showPersonalPage(Model model,
+                                   @AuthenticationPrincipal com.example.task.security.CustomUserDetails userDetails) {
+
+        User currentUser = userDetails.getUser(); // 🔥 теперь достаём напрямую
 
         List<Todo> assignedToMe = todoService.getAssignedToMe(currentUser.getId());
         List<Todo> assignedByMe = todoService.getAssignedByMe(currentUser.getId());
@@ -36,8 +38,6 @@ public class TodoController{
 
         return "personal_page";
     }
-
-
 
     @PostMapping("/add")
     public String addTodo(@ModelAttribute Todo todo,

@@ -20,6 +20,9 @@ public class User {
     private String password;
     private LocalDate birth;
     private Integer age;
+    @OneToMany(mappedBy = "assignedTo", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Todo> todos;
+
 
     public User() {
     }
@@ -102,5 +105,13 @@ public class User {
                 ", birth=" + birth +
                 ", age=" + age +
                 '}';
+    }
+
+    public List<Todo> getTodos() {
+        return todos;
+    }
+
+    public void setTodos(List<Todo> todos) {
+        this.todos = todos;
     }
 }

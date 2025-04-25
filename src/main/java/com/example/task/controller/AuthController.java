@@ -1,8 +1,9 @@
 package com.example.task.controller;
 
 import com.example.task.model.User;
+import com.example.task.security.CustomUserDetails;
 import com.example.task.service.UserService;
-import jakarta.servlet.http.HttpSession;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -32,49 +33,28 @@ public class AuthController {
         System.out.println("Register request: " + user);
 
         try {
-            userService.create(user); // 🔄 Используем главный метод регистрации с расчётом возраста и проверками
+            userService.create(user);
             return "redirect:/login";
         } catch (IllegalStateException e) {
             System.out.println("Ошибка регистрации: " + e.getMessage());
-            return "error_page"; // можно передавать сообщение об ошибке в модель, если нужно
-        }
-    }
-
-    @PostMapping("/login")
-    public String login(@ModelAttribute("loginRequest") User user, HttpSession session) {
-        User authenticated = userService.authentication(user.getLogin(), user.getPassword());
-
-        if (authenticated != null) {
-            session.setAttribute("user", authenticated);
-            return "redirect:/personal_page"; // ✅ редирект на личную страницу
-        } else {
             return "error_page";
         }
     }
 
     @GetMapping("/profile")
-    public String profile(HttpSession session, Model model) {
-        User user = (User) session.getAttribute("user");
-        if (user == null) {
+    public String profile(@AuthenticationPrincipal CustomUserDetails userDetails, Model model) {
+        if (userDetails == null) {
             return "redirect:/login";
         }
-        model.addAttribute("user", user);
+        model.addAttribute("user", userDetails.getUser());
         return "profile";
     }
 
     @PostMapping("/profile")
-    public String updateProfile(@ModelAttribute("user") User updatedUser, HttpSession session) {
-        User currentUser = (User) session.getAttribute("user");
-        if (currentUser == null) {
-            return "redirect:/login";
-        }
-
-        // Передаём в сервис все обновления
+    public String updateProfile(@ModelAttribute("user") User updatedUser,
+                                @AuthenticationPrincipal CustomUserDetails userDetails) {
+        User currentUser = userDetails.getUser();
         userService.updateProfile(currentUser.getId(), updatedUser);
-
-        // Обновляем сессию
-        session.setAttribute("user", userService.findById(currentUser.getId()));
         return "redirect:/profile";
     }
-
 }
