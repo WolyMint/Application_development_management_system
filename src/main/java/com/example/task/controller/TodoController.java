@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -40,15 +41,22 @@ public class TodoController{
     }
 
     @PostMapping("/add")
-    public String addTodo(@ModelAttribute Todo todo,
-                          @RequestParam("assignedUserLogin") String assignedUserLogin,
-                          @AuthenticationPrincipal UserDetails userDetails) {
-        User author = userService.findByLogin(userDetails.getUsername());
+    public String addTodo(@ModelAttribute Todo newTodo,
+                          @RequestParam String assignedUserLogin,
+                          Principal principal,
+                          Model model) {
+        User author = userService.findByLogin(principal.getName());
         User assignedUser = userService.findByLogin(assignedUserLogin);
 
-        todo.setAuthor(author);
-        todo.setAssignedUser(assignedUser);
-        todoService.save(todo);
+        if (assignedUser == null) {
+            model.addAttribute("error", "Пользователь с таким логином не найден.");
+            model.addAttribute("allUsers", userService.findAll()); // если нужно
+            return "todoList"; // или твоя главная страница
+        }
+
+        newTodo.setAuthor(author);
+        newTodo.setAssignedUser(assignedUser);
+        todoService.save(newTodo);
 
         return "redirect:/personal_page";
     }
@@ -74,4 +82,10 @@ public class TodoController{
         model.addAttribute("searchTerm", searchTerm);
         return "personal_page";
     }
+    @PostMapping("/toggle/{id}")
+    public String toggleCompleted(@PathVariable Long id, Principal principal) {
+        todoService.toggleCompleted(id, principal.getName());
+        return "redirect:/";
+    }
+
 }

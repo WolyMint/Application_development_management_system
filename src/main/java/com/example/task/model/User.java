@@ -20,7 +20,7 @@ public class User {
     private String password;
     private LocalDate birth;
     private Integer age;
-    @OneToMany(mappedBy = "assignedTo", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "assignedUser")
     private List<Todo> todos;
 
 

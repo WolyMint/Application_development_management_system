@@ -21,14 +21,23 @@ public class Todo {
     @JoinColumn(name = "assigned_user_id")
     private User assignedUser; // Кому назначена задача
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User assignedTo;
 
     private boolean completed = false; // Выполнена или нет
 
+    @Transient
+    private String assignedUserLogin;
 
-    public Todo() {}
+    public String getAssignedUserLogin() {
+        return assignedUserLogin;
+    }
+
+    public void setAssignedUserLogin(String assignedUserLogin) {
+        this.assignedUserLogin = assignedUserLogin;
+    }
+
+
+    public Todo() {
+    }
 
     public Todo(String title) {
         this.title = title;
@@ -72,13 +81,5 @@ public class Todo {
 
     public void setAssignedUser(User assignedUser) {
         this.assignedUser = assignedUser;
-    }
-
-    public User getAssignedTo() {
-        return assignedTo;
-    }
-
-    public void setAssignedTo(User assignedTo) {
-        this.assignedTo = assignedTo;
     }
 }

@@ -61,5 +61,11 @@ public class TodoService {
         return todoRepository.findByAuthorId(userId);
     }
 
-
+    public void toggleCompleted(Long id, String username) {
+        Todo todo = todoRepository.findById(id).orElseThrow();
+        if (todo.getAuthor().getLogin().equals(username)) {
+            todo.setCompleted(!todo.isCompleted());
+            todoRepository.save(todo);
+        }
+    }
 }
