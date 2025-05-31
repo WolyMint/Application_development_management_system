@@ -35,44 +35,6 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public void delete(Long id) {
-        if (!userRepository.existsById(id)) {
-            throw new IllegalStateException("Пользователя с id: " + id + " не существует.");
-        }
-        userRepository.deleteById(id);
-    }
-
-    @Transactional
-    public void update(Long id, String email, String name) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new IllegalStateException("Пользователя с id: " + id + " не существует."));
-
-        if (email != null && !email.equals(user.getEmail())) {
-            Optional<User> foundByEmail = userRepository.findByEmail(email);
-            if (foundByEmail.isPresent()) {
-                throw new IllegalStateException("Пользователь с таким email уже существует.");
-            }
-            user.setEmail(email);
-        }
-        if (name != null && !name.equals(user.getName())) {
-            user.setName(name);
-        }
-    }
-
-    public User registerUser(String name, String login, String password, String email, LocalDate birth) {
-        validateUniqueUser(login, email);
-
-        User user = new User();
-        user.setName(name);
-        user.setLogin(login);
-        user.setPassword(passwordEncoder.encode(password));
-        user.setEmail(email);
-        user.setBirth(birth);
-        user.setAge(Period.between(birth, LocalDate.now()).getYears());
-
-        return userRepository.save(user);
-    }
-
     @Transactional
     public void updateProfile(Long id, User updatedUser) {
         User user = userRepository.findById(id)

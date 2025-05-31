@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div th:fragment="statisticsSection" class="row text-center">
+  <div class="col">
+    <h4>Всего приложений</h4>
+    <p th:text="${totalProjects}">0</p>
+  </div>
+  <div class="col">
+    <h4>Завершено</h4>
+    <p th:text="${completedProjects}">0</p>
+  </div>
+  <div class="col">
+    <h4>Активные исполнители</h4>
+    <ul>
+      <li th:each="dev : ${topDevelopers}" th:text="${dev.name}">Имя</li>
+    </ul>
+  </div>
+</div>
+</body>
+</html>

@@ -16,12 +16,12 @@ public class CustomUserDetails implements UserDetails {
     }
 
     public User getUser() {
-        return user; // чтобы в контроллерах можно было получить оригинального User-а
+        return user;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.emptyList(); // если роли не нужны
+        return Collections.emptyList();
     }
 
     @Override

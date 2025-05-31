@@ -1,0 +1,13 @@
+package com.example.task.repository;
+
+import com.example.task.model.Project;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.List;
+
+public interface ProjectRepository extends JpaRepository<Project, Long> {
+    List<Project> findByAssignedUserId(Long id);
+    List<Project> findByAuthorId(Long id);
+    List<Project> findByTitleContainingIgnoreCase(String title);
+
+}

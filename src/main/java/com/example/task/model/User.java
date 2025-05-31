@@ -2,7 +2,6 @@ package com.example.task.model;
 
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import java.time.LocalDate;
@@ -21,7 +20,7 @@ public class User {
     private LocalDate birth;
     private Integer age;
     @OneToMany(mappedBy = "assignedUser")
-    private List<Todo> todos;
+    private List<Project> applications;
 
 
     public User() {
@@ -107,11 +106,11 @@ public class User {
                 '}';
     }
 
-    public List<Todo> getTodos() {
-        return todos;
+    public List<Project> getApplications() {
+        return applications;
     }
 
-    public void setTodos(List<Todo> todos) {
-        this.todos = todos;
+    public void setApplications(List<Project> applications) {
+        this.applications = applications;
     }
 }

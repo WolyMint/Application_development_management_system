@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<h2 class="mb-4">Приложения </h2>
+<div th:each="app : ${projects}" class="card mb-3">
+  <div class="card-body">
+    <h5 th:text="${app.title}" class="card-title"></h5>
+    <p th:text="${app.description}" class="card-text"></p>
+    <div class="d-flex justify-content-between">
+      <small th:text="'Автор: ' + ${app.owner.login}"></small>
+      <a th:href="@{'/projects/' + ${app.id}}" class="btn btn-outline-primary btn-sm">Подробнее</a>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
