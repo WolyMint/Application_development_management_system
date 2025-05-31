@@ -9,14 +9,14 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 @Controller
-@RequestMapping("/subtasks")
+@RequestMapping("/tasks")
 public class TaskController {
 
-    private final TaskService subtaskService;
+    private final TaskService taskService;
     private final UserService userService;
 
-    public TaskController(TaskService subtaskService, UserService userService) {
-        this.subtaskService = subtaskService;
+    public TaskController(TaskService taskService, UserService userService) {
+        this.taskService = taskService;
         this.userService = userService;
     }
 
@@ -24,40 +24,40 @@ public class TaskController {
     public String createTask(@RequestParam Long projectId,
                                 @RequestParam String title,
                                 @RequestParam String description) {
-        subtaskService.createTask(projectId, title, description);
+        taskService.createTask(projectId, title, description);
         return "redirect:/project_detail";
     }
 
     @PostMapping("/{id}/assign")
     public String assignToDeveloper(@PathVariable Long id,
                                     @RequestParam String developerLogin) {
-        subtaskService.assignToDeveloper(id, developerLogin);
+        taskService.assignToDeveloper(id, developerLogin);
         return "redirect:/projects";
     }
 
     @PostMapping("/{id}/complete")
     public String completeTask(@PathVariable Long id) {
-        subtaskService.completeTask(id);
+        taskService.completeTask(id);
         return "redirect:/projects";
     }
 
     // 4. Отклонение подзадачи
     @PostMapping("/{id}/reject")
     public ResponseEntity<Task> rejectTask(@PathVariable Long id) {
-        Task rejected = subtaskService.rejectTask(id);
+        Task rejected = taskService.rejectTask(id);
         return ResponseEntity.ok(rejected);
     }
 
     // 5. Получение подзадач по ID приложения
     @GetMapping("/by-project/{projectId}")
     public ResponseEntity<List<Task>> getTasksByProject(@PathVariable Long projectId) {
-        List<Task> subtasks = subtaskService.getTasksByProject(projectId);
-        return ResponseEntity.ok(subtasks);
+        List<Task> tasks = taskService.getTasksByProject(projectId);
+        return ResponseEntity.ok(tasks);
     }
-    @PostMapping("/subtasks/assign")
-    public String assignTask(@RequestParam Long subtaskId,
+    @PostMapping("/tasks/assign")
+    public String assignTask(@RequestParam Long taskId,
                                 @RequestParam String developerLogin) {
-        subtaskService.assignToDeveloper(subtaskId, developerLogin);
+        taskService.assignToDeveloper(taskId, developerLogin);
         return "redirect:/projects";
     }
 }
