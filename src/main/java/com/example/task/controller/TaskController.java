@@ -21,10 +21,10 @@ public class TaskController {
     }
 
     @PostMapping("/create")
-    public String createSubtask(@RequestParam Long projectId,
+    public String createTask(@RequestParam Long projectId,
                                 @RequestParam String title,
                                 @RequestParam String description) {
-        subtaskService.createSubtask(projectId, title, description);
+        subtaskService.createTask(projectId, title, description);
         return "redirect:/project_detail";
     }
 
@@ -36,26 +36,26 @@ public class TaskController {
     }
 
     @PostMapping("/{id}/complete")
-    public String completeSubtask(@PathVariable Long id) {
-        subtaskService.completeSubtask(id);
+    public String completeTask(@PathVariable Long id) {
+        subtaskService.completeTask(id);
         return "redirect:/projects";
     }
 
     // 4. Отклонение подзадачи
     @PostMapping("/{id}/reject")
-    public ResponseEntity<Task> rejectSubtask(@PathVariable Long id) {
-        Task rejected = subtaskService.rejectSubtask(id);
+    public ResponseEntity<Task> rejectTask(@PathVariable Long id) {
+        Task rejected = subtaskService.rejectTask(id);
         return ResponseEntity.ok(rejected);
     }
 
     // 5. Получение подзадач по ID приложения
     @GetMapping("/by-project/{projectId}")
-    public ResponseEntity<List<Task>> getSubtasksByProject(@PathVariable Long projectId) {
-        List<Task> subtasks = subtaskService.getSubtasksByProject(projectId);
+    public ResponseEntity<List<Task>> getTasksByProject(@PathVariable Long projectId) {
+        List<Task> subtasks = subtaskService.getTasksByProject(projectId);
         return ResponseEntity.ok(subtasks);
     }
     @PostMapping("/subtasks/assign")
-    public String assignSubtask(@RequestParam Long subtaskId,
+    public String assignTask(@RequestParam Long subtaskId,
                                 @RequestParam String developerLogin) {
         subtaskService.assignToDeveloper(subtaskId, developerLogin);
         return "redirect:/projects";
