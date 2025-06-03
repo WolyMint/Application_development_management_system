@@ -16,6 +16,15 @@
             <p class="mb-1" th:text="${task.title}">Название задачи</p>
             <small th:text="'Статус: ' + (${task.completed} ? '✅ Выполнено' : '⏳ В процессе')">Статус</small><br/>
             <span th:if="${task.assignedUser != null}" th:text="'Исполнитель: ' + ${task.assignedUser.login}">Исполнитель</span>
+<!--            <div class="mb-3">-->
+<!--                <label class="form-label">Статус</label>-->
+<!--                <select th:field="*{status}" class="form-select">-->
+<!--                    <option th:each="stat : ${T(com.example.task.model.ProjectStatus).values()}"-->
+<!--                            th:value="${stat}"-->
+<!--                            th:text="${stat.displayName}">-->
+<!--                    </option>-->
+<!--                </select>-->
+<!--            </div>-->
         </div>
         <div>
             <form th:action="@{'/task/assign/' + ${task.id}}" method="post" th:if="${task.assignedUser == null}">

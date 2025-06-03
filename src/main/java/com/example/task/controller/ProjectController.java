@@ -1,6 +1,7 @@
 package com.example.task.controller;
 
 import com.example.task.model.Project;
+import com.example.task.model.ProjectStatus;
 import com.example.task.model.User;
 import com.example.task.service.ProjectService;
 import com.example.task.service.UserService;
@@ -72,17 +73,21 @@ public class ProjectController {
     }
     @GetMapping("project_form")
     public String showProjectForm(Model model) {
-        model.addAttribute("project", new Project());
-        return "project_form";
-    }
-    @PostMapping("project_form")
-    public String createProject(@ModelAttribute("project") Project project,
-                                    Principal principal) {
-        User user = userService.findByLogin(principal.getName());
-        project.setOwner(user);
-        projectService.save(project);
+        Project project = new Project();
+        project.setStatus(ProjectStatus.OPEN); // Устанавливаем статус по умолчанию
+        model.addAttribute("project", project);
 
         return "project_form";
     }
-
+    @PostMapping("/project_form")
+    public String submitForm(@ModelAttribute Project project, Principal principal) {
+        projectService.saveProject(project, principal);
+        return "redirect:/projects"; // редирект после успешного сохранения
+    }
+    @GetMapping("/projects")
+    public String showProjects(Model model) {
+        List<Project> projects = projectService.getAllProjects();
+        model.addAttribute("projects", projects);
+        return "projects"; // имя шаблона
+    }
 }

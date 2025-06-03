@@ -1,16 +1,20 @@
 package com.example.task.service;
 
 import com.example.task.model.Project;
+import com.example.task.model.User;
 import com.example.task.repository.ProjectRepository;
 import org.springframework.stereotype.Service;
 
+import java.security.Principal;
 import java.util.List;
 
 @Service
 public class ProjectService {
     private final ProjectRepository projectRepository;
+    private final UserService userService;
 
-    public ProjectService(ProjectRepository projectRepository) {
+    public ProjectService(ProjectRepository projectRepository, UserService userService) {
+        this.userService = userService;
         this.projectRepository = projectRepository;
     }
 
@@ -34,14 +38,23 @@ public class ProjectService {
     }
 
     public List<Project> getAssignedByMe(Long userId) {
-        return projectRepository.findByAuthorId(userId);
+        return projectRepository.findByOwnerId(userId);
     }
 
     public void toggleCompleted(Long id, String username) {
         Project project = projectRepository.findById(id).orElseThrow();
-        if (project.getAuthor().getLogin().equals(username)) {
+        if (project.getOwner().getLogin().equals(username)) {
             project.setCompleted(!project.isCompleted());
             projectRepository.save(project);
         }
+    }
+    public void saveProject(Project project, Principal principal) {
+        User user = userService.findByLogin(principal.getName());
+        project.setOwner(user);
+        projectRepository.save(project);
+    }
+
+    public List<Project> getAllProjects() {
+        return projectRepository.findAll();
     }
 }

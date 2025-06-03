@@ -17,6 +17,15 @@
       <label class="form-label">Описание</label>
       <textarea th:field="*{description}" class="form-control" rows="5" placeholder="Введите описание"></textarea>
     </div>
+    <div class="mb-3">
+      <label class="form-label">Статус</label>
+      <select th:field="*{status}" class="form-select">
+        <option th:each="stat : ${T(com.example.task.model.ProjectStatus).values()}"
+                th:value="${stat.name()}"
+                th:text="${stat.getDisplayName()}">
+        </option>
+      </select>
+    </div>
     <button class="btn btn-primary" type="submit">Опубликовать</button>
   </form>
 </div>

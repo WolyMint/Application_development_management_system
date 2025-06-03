@@ -16,17 +16,13 @@ public class Project {
 
     private String description;
 
-    @ManyToOne
-    @JoinColumn(name = "author_id")
-    private User author;
-
     @Enumerated(EnumType.STRING)
     private ProjectStatus status;
 
     private LocalDateTime createdAt;
 
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
-    private List<Task> subtasks;
+    private List<Task> task;
     @ManyToOne
     @JoinColumn(name = "assigned_user_id")
     private User assignedUser;
@@ -72,14 +68,6 @@ public class Project {
         this.description = description;
     }
 
-    public User getAuthor() {
-        return author;
-    }
-
-    public void setAuthor(User author) {
-        this.author = author;
-    }
-
     public ProjectStatus getStatus() {
         return status;
     }
@@ -96,12 +84,12 @@ public class Project {
         this.createdAt = createdAt;
     }
 
-    public List<Task> getSubtasks() {
-        return subtasks;
+    public List<Task> getTask() {
+        return task;
     }
 
-    public void setSubtasks(List<Task> subtasks) {
-        this.subtasks = subtasks;
+    public void setTask(List<Task> Task) {
+        this.task = task;
     }
 
     public User getAssignedUser() {
