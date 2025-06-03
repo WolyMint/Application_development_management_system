@@ -30,6 +30,8 @@ public class Task {
     @JoinColumn(name = "assigned_user_id")
     private User assignedUser;
 
+
+
     public Task() {
         this.createdAt = LocalDateTime.now();
         this.status = TaskStatus.OPEN;

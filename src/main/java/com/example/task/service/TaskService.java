@@ -43,7 +43,7 @@ public class TaskService {
         return taskRepository.save(task);
     }
 
-    // Разработчик берёт подзадачу в работу
+    // Разработчик берёт задачу в работу
     public Task assignToDeveloper(Long taskId, String developerLogin) {
         Task task = taskRepository.findById(taskId)
                 .orElseThrow(() -> new RuntimeException("Task not found"));
@@ -57,7 +57,7 @@ public class TaskService {
         return taskRepository.save(task);
     }
 
-    // Завершение подзадачи
+    // Завершение задачи
     public Task completeTask(Long taskId) {
         Task task = taskRepository.findById(taskId)
                 .orElseThrow(() -> new RuntimeException("Task not found"));
@@ -82,4 +82,11 @@ public class TaskService {
     public List<Task> getTasksByProject(Long projectId) {
         return taskRepository.findByProjectId(projectId);
     }
+    public List<Task> findTasksByDeveloper(User developer) {
+        return taskRepository.findByAssignedUser(developer);
+    }
+
+
+
+
 }

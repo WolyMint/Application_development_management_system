@@ -26,7 +26,45 @@
             <button class="btn btn-outline-secondary" type="submit">Search</button>
         </div>
     </form>
-    <a th:href="@{/project_form}" class="btn btn-success">Создать новую задачу</a>
+    <a th:href="@{/project_form}" class="btn btn-success">Создать новый проект</a>
+    <h2>Я создал проекты</h2>
+    <div th:if="${assignedByMe != null}">
+        <ul class="list-group">
+            <li class="list-group-item" th:each="project : ${assignedByMe}">
+                <div class="fw-bold" th:text="${project.title}">Название проекта</div>
+                <div class="text-muted" th:text="${project.description}">Описание проекта</div>
+
+                <a th:href="@{/project_detail/{id}(id=${project.id})}" class="btn btn-sm btn-outline-primary mb-2">
+                    Добавить задачу
+                </a>
+
+                <div th:if="${project.task != null and #lists.size(project.task) > 0}">
+                    <ul class="list-group mt-2">
+                        <li class="list-group-item" th:each="task : ${project.task}">
+                            <strong th:text="${task.title}">Название задачи</strong><br/>
+                            <span th:text="${task.description}">Описание</span>
+                        </li>
+                    </ul>
+                </div>
+                <div th:if="${project.task == null or #lists.isEmpty(project.task)}">
+                    <em>Задачи пока не добавлены</em>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <h2>Взятые мною задачи</h2>
+    <div th:each="project : ${takenProjects}">
+        <h5>
+            <a th:href="@{/project_detail(id=${project.id})}" th:text="${project.title}">Название проекта</a>
+        </h5>
+        <ul>
+            <li th:each="task : ${tasksTaken}">
+                <div th:if="${task.project.id == project.id}">
+                    <strong th:text="${task.title}"></strong> — <span th:text="${task.description}"></span>
+                </div>
+            </li>
+        </ul>
+    </div>
 </div>
 </body>
 </html>

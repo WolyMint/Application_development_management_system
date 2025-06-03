@@ -57,4 +57,12 @@ public class ProjectService {
     public List<Project> getAllProjects() {
         return projectRepository.findAll();
     }
+
+    public Project findById(Long id) {
+        return projectRepository.findById(id).orElseThrow();
+    }
+
+    public Object findByOwner(User currentUser) {
+        return projectRepository.findByOwnerId(currentUser.getId());
+    }
 }

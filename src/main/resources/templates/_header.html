@@ -8,12 +8,12 @@
 <body>
 <div th:fragment="header">
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" th:href="@{/}">Главная</a>
+    <a class="navbar-brand" th:href="@{/personal_page}">Главная</a>
     <div class="collapse navbar-collapse">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item"><a class="nav-link" th:href="@{/profile}">Профиль</a></li>
-            <li class="nav-item"><a class="nav-link" th:href="@{/project_form}">Создать новую задачу</a></li>
-            <li class="nav-item"><a class="nav-link" th:href="@{/projects}">Приложения</a></li>
+            <li class="nav-item"><a class="nav-link" th:href="@{/project_form}">Создать новый проект</a></li>
+            <li class="nav-item"><a class="nav-link" th:href="@{/projects}">Проекты</a></li>
         </ul>
         <ul class="navbar-nav ml-auto">
             <li class="nav-item"><a class="nav-link" th:href="@{/logout}">Выйти</a></li>

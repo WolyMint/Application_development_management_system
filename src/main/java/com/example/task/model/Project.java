@@ -21,16 +21,19 @@ public class Project {
 
     private LocalDateTime createdAt;
 
-    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Task> task;
     @ManyToOne
     @JoinColumn(name = "assigned_user_id")
     private User assignedUser;
+
     private boolean completed;
+
     @ManyToOne
     @JoinColumn(name = "owner_id")
-
     private User owner;
+    private boolean published;
+
 
 
     public Project() {
@@ -114,5 +117,13 @@ public class Project {
 
     public void setOwner(User owner) {
         this.owner = owner;
+    }
+
+    public boolean isPublished() {
+        return published;
+    }
+
+    public void setPublished(boolean published) {
+        this.published = published;
     }
 }

@@ -5,6 +5,7 @@ import com.example.task.service.TaskService;
 import com.example.task.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,13 +21,22 @@ public class TaskController {
         this.userService = userService;
     }
 
+    @GetMapping("/create")
+    public String showCreateTaskForm(@RequestParam Long projectId, Model model) {
+        Task task = new Task();
+        model.addAttribute("task", task);
+        model.addAttribute("projectId", projectId);
+        return "task_form"; // создадим этот шаблон
+    }
     @PostMapping("/create")
     public String createTask(@RequestParam Long projectId,
-                                @RequestParam String title,
-                                @RequestParam String description) {
+                             @RequestParam String title,
+                             @RequestParam String description) {
         taskService.createTask(projectId, title, description);
-        return "redirect:/project_detail";
+        return "redirect:/project_detail/" + projectId;
     }
+
+
 
     @PostMapping("/{id}/assign")
     public String assignToDeveloper(@PathVariable Long id,
