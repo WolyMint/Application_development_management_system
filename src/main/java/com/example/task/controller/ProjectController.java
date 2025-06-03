@@ -82,7 +82,7 @@ public class ProjectController {
         project.setOwner(user);
         projectService.save(project);
 
-        return "redirect:/personal_page";
+        return "project_form";
     }
 
 }

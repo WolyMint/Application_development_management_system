@@ -1,78 +1,32 @@
-    <!DOCTYPE html>
-    <html xmlns:th="http://www.thymeleaf.org">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Список дел</title>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Список дел</title>
 
-        <!-- Bootstrap CSS -->
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-        <!-- Bootstrap Icons -->
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
-    </head>
-    <body>
-<!--    <div class="position-absolute top-0 end-0 m-3">-->
-<!--        <a th:href="@{/profile}" class="text-decoration-none text-dark">-->
-<!--            <i class="bi bi-person-circle fs-3"></i>-->
-<!--        </a>-->
-<!--    </div>-->
-    <div th:replace="_header :: header"></div>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+</head>
+<body>
+<div th:replace="_header :: header"></div>
 
-    <div class="container mt-3">
-        <h1 class="text-center mb-4">Список дел</h1>
+<div class="container mt-3">
+    <h1 class="text-center mb-4">Список дел</h1>
 
-        <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+    <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
 
+    <form th:action="@{/removeAll}" method="post" class="text-center mb-4">
+        <button class="btn btn-danger" type="submit">Remove all</button>
+    </form>
 
-        <form th:action="@{/removeAll}" method="post" class="text-center mb-4">
-            <button class="btn btn-danger" type="submit">Remove all</button>
-        </form>
-
-        <form th:action="@{/search}" method="post" class="mb-3">
-            <div class="input-group">
-                <input type="text" class="form-control" name="searchTerm" placeholder="Enter search task" th:value="${searchTerm}">
-                <button class="btn btn-outline-secondary" type="submit">Search</button>
-            </div>
-        </form>
-        <a th:href="@{/project_form}" class="btn btn-success">Создать новую задачу</a>
-
-        <h2 class="mt-4">📌 Мне назначены задачи:</h2>
-        <ul class="list-group mb-4">
-            <li th:each="task : ${assignedToMe}" class="list-group-item d-flex justify-content-between align-items-center">
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" th:checked="${task.completed}" disabled>
-                    <label class="form-check-label" th:text="${task.title}"></label>
-                    <div><small>Назначил: <b th:text="${task.author.login}"></b></small></div>
-                </div>
-                <form th:action="@{'/delete/' + ${task.id}}" method="post">
-                    <button type="submit" class="btn btn-danger btn-sm">Удалить</button>
-                </form>
-            </li>
-        </ul>
-
-        <h2 class="mt-4">🧾 Я назначил другим:</h2>
-        <ul class="list-group">
-            <li th:each="task : ${assignedByMe}" class="list-group-item d-flex justify-content-between align-items-center">
-                <div class="d-flex flex-column">
-                    <form th:action="@{'/toggle/' + ${task.id}}" method="post" class="mb-2">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox"
-                                   name="completed"
-                                   onchange="this.form.submit()"
-                                   th:checked="${task.completed}" />
-                            <label class="form-check-label" th:text="${task.title}"></label>
-                        </div>
-                    </form>
-                    <div>
-                        <small>Исполнитель: <b th:text="${task.assignedUser.login}"></b></small>
-                    </div>
-                </div>
-                <form th:action="@{'/delete/' + ${task.id}}" method="post">
-                    <button type="submit" class="btn btn-danger btn-sm">Удалить</button>
-                </form>
-            </li>
-        </ul>
-    </div>
-
-    </body>
-    </html>
+    <form th:action="@{/search}" method="post" class="mb-3">
+        <div class="input-group">
+            <input type="text" class="form-control" name="searchTerm" placeholder="Enter search task" th:value="${searchTerm}">
+            <button class="btn btn-outline-secondary" type="submit">Search</button>
+        </div>
+    </form>
+    <a th:href="@{/project_form}" class="btn btn-success">Создать новую задачу</a>
+</div>
+</body>
+</html>
