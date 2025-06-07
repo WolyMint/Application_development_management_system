@@ -52,19 +52,14 @@
             </li>
         </ul>
     </div>
-    <h2>Взятые мною задачи</h2>
-    <div th:each="project : ${takenProjects}">
-        <h5>
-            <a th:href="@{/project_detail(id=${project.id})}" th:text="${project.title}">Название проекта</a>
-        </h5>
-        <ul>
-            <li th:each="task : ${tasksTaken}">
-                <div th:if="${task.project.id == project.id}">
-                    <strong th:text="${task.title}"></strong> — <span th:text="${task.description}"></span>
-                </div>
-            </li>
-        </ul>
-    </div>
+    <h3>Мои задачи:</h3>
+    <ul class="list-group">
+        <li class="list-group-item" th:each="task : ${tasksTaken}">
+            <strong th:text="${task.title}">Заголовок</strong> —
+            <span th:text="${task.description}">Описание</span><br>
+            <small th:text="'Проект: ' + ${task.project.title}">Название проекта</small>
+        </li>
+    </ul>
 </div>
 </body>
 </html>

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 @Controller
 @RequestMapping("/tasks")
@@ -36,14 +37,14 @@ public class TaskController {
         return "redirect:/project_detail/" + projectId;
     }
 
-
-
     @PostMapping("/{id}/assign")
-    public String assignToDeveloper(@PathVariable Long id,
-                                    @RequestParam String developerLogin) {
+    public String assignToDeveloper(@PathVariable Long id, Principal principal) {
+        String developerLogin = principal.getName();
         taskService.assignToDeveloper(id, developerLogin);
-        return "redirect:/projects";
+        return "redirect:/personal_page";
     }
+
+
 
     @PostMapping("/{id}/complete")
     public String completeTask(@PathVariable Long id) {
@@ -63,12 +64,6 @@ public class TaskController {
     public ResponseEntity<List<Task>> getTasksByProject(@PathVariable Long projectId) {
         List<Task> tasks = taskService.getTasksByProject(projectId);
         return ResponseEntity.ok(tasks);
-    }
-    @PostMapping("/tasks/assign")
-    public String assignTask(@RequestParam Long taskId,
-                                @RequestParam String developerLogin) {
-        taskService.assignToDeveloper(taskId, developerLogin);
-        return "redirect:/projects";
     }
 }
 

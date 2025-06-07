@@ -22,13 +22,15 @@
         <strong th:text="${task.title}">Заголовок задачи</strong><br>
         <span th:text="${task.description}">Описание задачи</span><br>
 
-        <div th:if="${task.assignedUser == null and (app.owner != null and app.owner.login != #authentication?.principal?.username)}">
-          <form th:action="@{/tasks/{id}/assign(id=${task.id})}" method="post">
-            <button class="btn btn-primary btn-sm mt-2" type="submit">Взять задачу</button>
-          </form>
-        </div>
+        <form th:action="@{/tasks/{id}/assign(id=${task.id})}" method="post">
+          <button class="btn btn-primary btn-sm mt-2" type="submit">Взять задачу</button>
+        </form>
       </li>
     </ul>
+
+
+
+
 
     <div class="d-flex justify-content-between mt-3">
       <small th:text="'Автор: ' + ${app.owner.login}"></small>

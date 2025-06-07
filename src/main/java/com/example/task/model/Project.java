@@ -21,8 +21,9 @@ public class Project {
 
     private LocalDateTime createdAt;
 
-    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
     private List<Task> task;
+
     @ManyToOne
     @JoinColumn(name = "assigned_user_id")
     private User assignedUser;
@@ -91,9 +92,10 @@ public class Project {
         return task;
     }
 
-    public void setTask(List<Task> Task) {
+    public void setTask(List<Task> task) {
         this.task = task;
     }
+
 
     public User getAssignedUser() {
         return assignedUser;
